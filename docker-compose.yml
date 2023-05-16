@@ -1,16 +1,18 @@
 version: '3.8'
 
 services: 
+
   api:
     build:
-      context: ./api
-      dockerfile: Dockerfile
+      context: ./api-core
+      dockerfile: Dockerfile.dev
     ports:
-      - 8081:8081
+      - 8080:8080
     env_file:
       - ./environment.env
     volumes:
-      - ./api/:/app/
+      - ./api-core/app/:/app/
+    command: air
     depends_on:
       - kafka
 
@@ -24,7 +26,7 @@ services:
     env_file:
       - ./environment.env
     volumes:
-      - ./worker/:/app/
+      - ./worker/app/:/app/
     command: faust -A worker.app worker -l info
     ports:
       - 6066:6066
