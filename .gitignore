@@ -5,3 +5,4 @@ XTRACT-PIPELINE-data*
 tmp
 cache
 worker/app/model
+.DS_Store
