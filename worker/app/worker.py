@@ -33,7 +33,7 @@ for agent_name, agent_value in config.AGENTS.items():
     module_name = f"component.base.{agent_name.lower()}"
     module = import_module(module_name)
     agent_cls = getattr(module, f"{agent_name.capitalize()}Component")
-    agent_instance = agent_cls(redis=redis)
+    agent_instance = agent_cls(redis=redis,use_gpu=agent_value['use_gpu'], path_to_model=agent_value['path_to_model'])
 
     # Create the dynamic agent function name
     agent_func_name = f"process_agent_{agent_name}"
