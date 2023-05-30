@@ -1,0 +1,4 @@
+pytz==2023.3
+redislite==6.2.859089
+confluent-kafka==2.1.1
+opencv-python==4.7.0.72

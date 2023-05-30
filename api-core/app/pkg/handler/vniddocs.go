@@ -17,11 +17,12 @@ func VnIddocsAsync(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create a Kafka writer to publish messages to the 'section_gpu' topic
-	writer := kafka.NewWriter(kafka.WriterConfig{
-		Brokers: []string{"kafka:9092"},
-		Topic:   "section_gpu",
-	})
+	// Create a Kafka writer to publish messages to the 'upload_document' topic
+	writer := &kafka.Writer{
+		Addr:     kafka.TCP("kafka1:9092", "kafka2:9092"),
+		Topic:    "upload_document",
+		Balancer: &kafka.LeastBytes{},
+	}
 
 	// Convert the record to JSON bytes
 	valueBytes, err := json.Marshal(record)
@@ -30,7 +31,7 @@ func VnIddocsAsync(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Publish the record to the 'section_gpu' topic
+	// Publish the record to the 'upload_document' topic
 	err = writer.WriteMessages(r.Context(), kafka.Message{
 		Value: valueBytes,
 	})
