@@ -4,5 +4,8 @@ __pycache__
 XTRACT-PIPELINE-data*
 tmp
 cache
-worker/app/model
+worker
 .DS_Store
+
+# dashboard
+node_modules

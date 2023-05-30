@@ -1,0 +1,1 @@
+kafka-storage random-uuid
