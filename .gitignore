@@ -1,11 +1,16 @@
 *.env
 __pycache__
 *config.json
-XTRACT-PIPELINE-data*
-tmp
-cache
 worker
 .DS_Store
 
 # dashboard
 node_modules
+
+# database
+database/*
+!database/.gitkeep
+
+# redis
+redis/*
+!redis/.gitkeep
