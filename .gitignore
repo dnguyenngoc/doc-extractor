@@ -14,3 +14,4 @@ database/*
 # redis
 redis/*
 !redis/.gitkeep
+tmp

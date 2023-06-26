@@ -1,4 +1,6 @@
-package database
+// doc-extractor/pkg/repositories/setup.go
+
+package repositories
 
 import (
 	"context"
