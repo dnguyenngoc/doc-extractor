@@ -7,7 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	setting "doc-extractor/internal/settings"
+	setting "doc-extractor/config"
 )
 
 func routes() *mux.Router {
@@ -30,6 +30,6 @@ func main() {
 	r := routes()
 
 	// start sever
-	log.Println("Starting server on port 3001")
-	log.Fatal(http.ListenAndServe(":3001", r))
+	log.Println("Starting server on port 8080")
+	log.Fatal(http.ListenAndServe(":8080", r))
 }

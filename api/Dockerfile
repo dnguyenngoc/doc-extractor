@@ -6,13 +6,14 @@ FROM golang:alpine as builder
 WORKDIR /app
 
 COPY app/go.mod ./
-COPY app/main.go ./
+COPY app/cmd/main.go ./
 
 RUN go mod download 
 
 COPY ./app ./
 
 # Create swager docs
+RUN go get -u github.com/swaggo/swag/cmd/swag
 RUN go install github.com/swaggo/swag/cmd/swag
 
 RUN export PATH=$(go env GOPATH)/bin:$PATH

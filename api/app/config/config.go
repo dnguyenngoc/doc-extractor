@@ -1,4 +1,6 @@
-package setting
+// doc-extractor/config/config.go
+
+package config
 
 import (
 	"os"

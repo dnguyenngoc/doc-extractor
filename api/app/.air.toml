@@ -1,0 +1,10 @@
+root = "."
+tmp_dir = "tmp"
+build_dir = "tmp/build"
+bin = "tmp/main"
+
+[build]
+cmd = "go build -o ./tmp/main ./cmd"
+
+[run]
+watch_dirs = ["cmd", "pkg", "config"]

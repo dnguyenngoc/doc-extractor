@@ -12,5 +12,9 @@ COPY ./app/go.mod ./app/go.sum ./
 
 RUN go mod download
 
-CMD ["air"]
+# # Install air for live-reloading
+# RUN go get -u github.com/cosmtrek/air
+
+# Set the entrypoint to run the application with air
+ENTRYPOINT ["air", "-c", ".air.toml"]
 
