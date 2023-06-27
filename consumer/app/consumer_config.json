@@ -1,0 +1,30 @@
+{
+    "pre_processing": {
+        "use_gpu": false,
+        "path_to_model": "/app/model/20230110_vniddocs_sd_yolov5x_best.pt",
+        "in_topics": ["upload_document"],
+        "out_topics": ["pre_processing"],
+        "partitions": 1
+    },
+    "invoice_field_detection": {
+        "use_gpu": false,
+        "path_to_model": "/app/model/20230110_vniddocs_sd_yolov5x_best.pt",
+        "in_topics": ["pre_processing"],
+        "out_topics": ["invoice_field_detection"],
+        "partitions": 1
+    },
+    "ocr": {
+        "use_gpu": false,
+        "path_to_model": "/app/model/20230110_vniddocs_sd_yolov5x_best.pt",
+        "in_topics": ["invoice_field_detection"],
+        "out_topics": ["ocr"],
+        "partitions": 1
+    },
+    "invoice_calculator": {
+        "use_gpu": false,
+        "path_to_model": "/app/model/20230110_vniddocs_sd_yolov5x_best.pt",
+        "in_topics": ["ocr"],
+        "out_topics": ["invoice_calculator"],
+        "partitions": 1
+    }
+}

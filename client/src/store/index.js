@@ -1,13 +1,31 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex';
 
-Vue.use(Vuex)
+const store = createStore({
+  state() {
+    return {
+      counter: 0,
+    };
+  },
+  mutations: {
+    increment(state) {
+      state.counter++;
+    },
+    decrement(state) {
+      state.counter--;
+    },
+  },
+  actions: {
+    incrementAsync(context) {
+      setTimeout(() => {
+        context.commit('increment');
+      }, 1000);
+    },
+  },
+  getters: {
+    counterSquared(state) {
+      return state.counter ** 2;
+    },
+  },
+});
 
-const store = new Vuex.Store({
-  state: {},
-  mutations: {},
-  actions: {},
-  modules: {}
-})
-
-export default store
+export default store;
