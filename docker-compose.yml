@@ -3,9 +3,9 @@ version: '3.8'
 services: 
 
 
-  dashboard:
+  client:
     build: 
-      context: ./dashboard
+      context: ./client
       dockerfile: Dockerfile
     ports:
       - 80:80
