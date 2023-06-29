@@ -19,3 +19,4 @@ func InitConfig() {
 	Config.Set("ApiSyncTimeOut", os.Getenv("API_TOKEN_SECRET"))
 	Config.Set("DbUri", os.Getenv("DB_URI"))
 }
+
