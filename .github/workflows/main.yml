@@ -7,6 +7,7 @@ on:
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  PROJECT_NAME: "doc-extractor"
   VERSION: "latest"
 
 jobs:
@@ -20,11 +21,11 @@ jobs:
         include:
           - name: API
             folder: api
-            image: $DOCKERHUB_USERNAME/$PROJECT_NAME:api-$VERSION
+            image: $DOCKER_USERNAME/$PROJECT_NAME:api-$VERSION
             if: true
           - name: CLIENT
             folder: client
-            image: $DOCKERHUB_USERNAME/$PROJECT_NAME:client-$VERSION
+            image: $DOCKER_USERNAME/$PROJECT_NAME:client-$VERSION
             if: ${{ github.event_path == 'client' }}
 
     steps:
