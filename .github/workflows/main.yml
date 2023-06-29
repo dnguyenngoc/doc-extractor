@@ -1,0 +1,57 @@
+name: CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - main
+      
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+  DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  PROJECT_NAME: doc-extractor
+  VERSION: latest
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        component:
+          - api,$DOCKERHUB_USERNAME/$PROJECT_NAME:api-$VERSION
+          - client,$DOCKERHUB_USERNAME/$PROJECT_NAME:client-$VERSION
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+
+      - name: Determine changes
+        id: determine_changes
+        run: |
+          components=($(echo "${{ matrix.component }}" | tr '|' '\n'))
+          for component in "${components[@]}"; do
+            comp=$(echo "$component" | awk -F ',' '{print $1}')
+            if [[ -n $(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- $comp/ ) ]]; then
+              echo "::set-output name=${comp}_changed::true"
+            fi
+          done
+          
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and deploy
+        run: |
+          for component in "${components[@]}"; do
+            comp=$(echo "$component" | awk -F ',' '{print $1}')
+            image=$(echo "$component" | awk -F ',' '{print $2}')
+
+            if [ "${{ needs.build.outputs.${comp}_changed }}" == "true" ]; then
+              echo "Image: $image"
+            fi
+          done
