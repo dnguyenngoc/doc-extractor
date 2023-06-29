@@ -21,7 +21,7 @@ jobs:
           - name: API
             folder: api
             image: $DOCKERHUB_USERNAME/$PROJECT_NAME:api-$VERSION
-            if: ${{ github.event_path == 'api' }}
+            if: true
           - name: CLIENT
             folder: client
             image: $DOCKERHUB_USERNAME/$PROJECT_NAME:client-$VERSION
