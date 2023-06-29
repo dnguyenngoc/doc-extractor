@@ -1,58 +1,48 @@
-name: CI/CD Workflow
+name: Docker Image CI
 
 on:
   push:
-    branches:
-      - main
-      
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
 env:
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-  DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-  PROJECT_NAME: doc-extractor
-  VERSION: latest
+  DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  VERSION: "latest"
 
 jobs:
-  init:
-    runs-on: ubuntu-latest
 
+  build_and_push:
+
+    runs-on: ubuntu-latest
+    
     strategy:
       matrix:
-        component:
-          - api,$DOCKERHUB_USERNAME/$PROJECT_NAME:api-$VERSION
-          - client,$DOCKERHUB_USERNAME/$PROJECT_NAME:client-$VERSION
+        include:
+          - name: API
+            folder: api
+            image: $DOCKERHUB_USERNAME/$PROJECT_NAME:api-$VERSION
+            if: ${{ github.event_path == 'api' }}
+          - name: CLIENT
+            folder: client
+            image: $DOCKERHUB_USERNAME/$PROJECT_NAME:client-$VERSION
+            if: ${{ github.event_path == 'client' }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_PASSWORD
-
-      - name: Determine changes
-        id: determine_changes
+        uses: actions/checkout@v3
+      
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Build Image
+        if: matrix.if
         run: |
-          components=($(echo "${{ matrix.component }}" | tr '|' '\n'))
-          for component in "${components[@]}"; do
-            comp=$(echo "$component" | awk -F ',' '{print $1}')
-            if [[ -n $(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- $comp/ ) ]]; then
-              echo "::set-output name=${comp}_changed::true"
-            fi
-          done
-          
-  build_and_push:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build and deploy
+          cd ${{ matrix.folder }}
+          docker build -t ${{ matrix.image }}
+      - name: Push Image
+        if: matrix.if
         run: |
-          components=($(echo "${{ matrix.component }}" | tr '|' '\n'))
-          for component in "${components[@]}"; do
-            comp=$(echo "$component" | awk -F ',' '{print $1}')
-            image=$(echo "$component" | awk -F ',' '{print $2}')
-
-            if [ "${{ needs.build.outputs.${comp}_changed }}" == "true" ]; then
-              echo "Image: $image"
-            fi
-          done
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker push ${{ matrix.image }}
