@@ -47,6 +47,7 @@ jobs:
     steps:
       - name: Build and deploy
         run: |
+          components=($(echo "${{ matrix.component }}" | tr '|' '\n'))
           for component in "${components[@]}"; do
             comp=$(echo "$component" | awk -F ',' '{print $1}')
             image=$(echo "$component" | awk -F ',' '{print $2}')
