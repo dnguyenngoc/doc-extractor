@@ -36,9 +36,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v3
+#         with:
+#           fetch-depth: 0
         
 #       - name: Check folder changes
 #         id: check-changes
