@@ -41,8 +41,7 @@ jobs:
       - name: Check folder changes
         id: check-changes
         run: |
-          default_branch=$(git symbolic-ref --short refs/remotes/origin/HEAD)
-          changes=$(git diff --name-only origin/$default_branch ${{ github.sha }})
+          changes=$(git diff --name-only origin/main ${{ github.sha }})
           echo "changes=${changes}" >> $GITHUB_ENV
           if echo "$changes" | grep -q "api/"; then
             echo "FolderA has changes"
