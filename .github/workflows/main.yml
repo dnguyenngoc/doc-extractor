@@ -30,48 +30,48 @@ jobs:
             echo "FolderA has changes"
           fi
 
-  check_changes:
-    runs-on: ubuntu-latest
+#   check_changes:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
 
-      - name: Check folder changes
-        id: check-changes
-        run: |
-          changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-          echo "changes=${changes}" >> $GITHUB_ENV
+#       - name: Check folder changes
+#         id: check-changes
+#         run: |
+#           changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+#           echo "changes=${changes}" >> $GITHUB_ENV
 
-  build_and_push:
-    needs: check_changes
-    runs-on: ubuntu-latest
+#   build_and_push:
+#     needs: check_changes
+#     runs-on: ubuntu-latest
     
-    strategy:
-      matrix:
-        include:
-          - name: API
-            folder: api
-            image: $DOCKER_USERNAME/$PROJECT_NAME:api-$VERSION
-          - name: CLIENT
-            folder: client
-            image: $DOCKER_USERNAME/$PROJECT_NAME:client-$VERSION
+#     strategy:
+#       matrix:
+#         include:
+#           - name: API
+#             folder: api
+#             image: $DOCKER_USERNAME/$PROJECT_NAME:api-$VERSION
+#           - name: CLIENT
+#             folder: client
+#             image: $DOCKER_USERNAME/$PROJECT_NAME:client-$VERSION
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
       
-      - name: Setup Docker
-        uses: docker/setup-buildx-action@v2
+#       - name: Setup Docker
+#         uses: docker/setup-buildx-action@v2
       
-      - name: Build Image
-        if: contains(needs.check_changes.outputs.changes, matrix.folder)
-        run: |
-          echo "Run Build Image"
-          cd ${{ matrix.folder }}
-          docker build -t ${{ matrix.image }} .
-      - name: Push Image
-        if: contains(needs.check_changes.outputs.chang, matrix.folder)
-        run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker push ${{ matrix.image }}
+#       - name: Build Image
+#         if: contains(needs.check_changes.outputs.changes, matrix.folder)
+#         run: |
+#           echo "Run Build Image"
+#           cd ${{ matrix.folder }}
+#           docker build -t ${{ matrix.image }} .
+#       - name: Push Image
+#         if: contains(needs.check_changes.outputs.chang, matrix.folder)
+#         run: |
+#           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+#           docker push ${{ matrix.image }}
