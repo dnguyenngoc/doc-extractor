@@ -17,6 +17,9 @@ jobs:
     runs-on: unutu-latest
     
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
       - name: Check folder changes
         id: check-changes
         run: |
