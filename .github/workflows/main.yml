@@ -55,10 +55,10 @@ jobs:
         run: |
           echo "Run list changes: ${{ needs.check_changes.outputs.changes }}"
           echo "Folder: ${{ matrix.folder }}"
-          echo "Check Contain: ${{ contains(needs.check_changes.outputs.changes, matrix.folder) }}"
+          echo "Check Contain: ${{ needs.check_changes.outputs.changes }} | grep -q ${{ matrix.folder }}"
       
       - name: Build Image
-        if: contains(needs.check_changes.outputs.changes, matrix.folder)
+        if: ${{ needs.check_changes.outputs.changes }} | grep -q ${{ matrix.folder }}
         run: |
           echo "Run Build Image"
           cd ${{ matrix.folder }}
