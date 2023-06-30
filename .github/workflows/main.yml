@@ -55,6 +55,7 @@ jobs:
         run: |
           changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           echo "changes=${changes}" >> $GITHUB_ENV
+          echo "CHANGES: $changes"
           if echo "$changes" | grep -q "api/"; then
             echo "FolderA has changes"
           fi
