@@ -1,0 +1,32 @@
+@mixin bg-custom-gradient($direction, $color-1, $color-2) {
+    background: linear-gradient($direction, $color-1, $color-2);
+}
+
+@mixin animation-pulse($duration: 1s) {
+    animation: pulse-animation $duration 1 forwards;
+  
+    @keyframes pulse-animation {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+  }
+
+  @mixin animation-scale($scaleFactor: 1.25, $duration: 1s) {
+    animation: scale-animation $duration 1 forwards;
+  
+    @keyframes scale-animation {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale($scaleFactor);
+      }
+    }
+  }

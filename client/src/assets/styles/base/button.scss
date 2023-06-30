@@ -1,0 +1,50 @@
+@import '../_mixins.scss';
+@import '../_variables.scss';
+
+.button {
+    @include bg-custom-gradient(to right, $color-button-primary, $color-button-secondary);
+    width: 304px;
+    height: 45px;
+    flex-shrink: 0;
+    top: 601px;
+    left: 288px;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 15px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: $color-text-default;
+    border: none;
+    border-radius: 25px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    &:hover {
+        @include animation-scale(1.1, 0.5s);
+    }
+
+    &.bg-white {
+        @include bg-custom-gradient(to right, $color-button-white, $color-button-white);
+    }
+
+    &.bg-danger {
+        @include bg-custom-gradient(to right, $color-button-danger, $color-button-danger);
+    }
+    &.bg-success {
+        @include bg-custom-gradient(to right, $color-button-success, $color-button-success);
+    }
+    &.bg-warning {
+        @include bg-custom-gradient(to right, $color-button-warning, $color-button-warning);
+    }
+}
+
+.button-normal {
+    @extend .button;
+    width: 200px;
+  }
+.button-small {
+    @extend .button;
+    width: 100px;
+}
+
+
