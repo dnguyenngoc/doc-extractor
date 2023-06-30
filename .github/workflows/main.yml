@@ -48,8 +48,9 @@ jobs:
       - name: Build Image
         if: contains(needs.check_changes.outputs.chang, matrix.folder)
         run: |
+          echo "Run Build Image"
           cd ${{ matrix.folder }}
-          docker build -t ${{ matrix.image }}
+          docker build -t ${{ matrix.image }} .
       - name: Push Image
         if: contains(needs.check_changes.outputs.chang, matrix.folder)
         run: |
