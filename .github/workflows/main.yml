@@ -45,12 +45,12 @@ jobs:
         uses: docker/setup-buildx-action@v2
       
       - name: Build Image
-        if: contains(needs.check_changes.outputs.chang, $folder)
+        if: contains(needs.check_changes.outputs.chang, matrix.folder)
         run: |
           cd ${{ matrix.folder }}
           docker build -t ${{ matrix.image }}
       - name: Push Image
-        if: contains(needs.check_changes.outputs.chang, $folder)
+        if: contains(needs.check_changes.outputs.chang, matrix.folder)
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker push ${{ matrix.image }}
