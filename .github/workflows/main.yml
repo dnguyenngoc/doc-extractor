@@ -21,7 +21,8 @@ jobs:
       - name: Check folder changes
         id: check-changes
         run: |
-          echo "::set-output name=chang::true"
+          echo "Check changes: $(git diff --name-only ${{ github.event.before }} ${{ github.sha }}"
+          echo "::set-output name=chang::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }}"
 
   build_and_push:
     needs: check_changes
@@ -42,7 +43,7 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Setup Docker
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
       
       - name: Build Image
         if: contains(needs.check_changes.outputs.chang, matrix.folder)
