@@ -23,7 +23,7 @@ jobs:
           changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
 
           # Check if the folder has changes
-          if echo "$changes" | grep -q "folderA/"; then
+          if echo "$changes" | grep -q "api/"; then
             echo "FolderA has changes"
           fi
 
