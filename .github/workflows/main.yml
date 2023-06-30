@@ -67,7 +67,7 @@ jobs:
           echo "Check Contain: ${{ needs.check_changes.outputs.is_changes_${{ matrix.image }}"
       
       - name: Build Image
-        if: needs.check_changes.outputs.is_changes_${{ matrix.image }} == 'true'
+        if: needs.check_changes.outputs.is_changes_${{ matrix.image }} == 'true' && matrix.folder == needs.check_changes.outputs.changed_folder
         run: |
           echo "Run Build Image"
           cd ${{ matrix.folder }}
