@@ -22,7 +22,8 @@ jobs:
         id: check-changes
         run: |
           echo "Check changes: $(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
-          echo "::set-output name=chang::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+          echo "chang=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})" >> $GITHUB_CHECKCHANGES
+          echo "DONE: $GITHUB_CHECKCHANGES"
 
   build_and_push:
     needs: check_changes
