@@ -13,6 +13,20 @@ env:
   VERSION: "latest"
 
 jobs:
+  test_check_changes:
+    runs-on: unutu-latest
+    
+    steps:
+      - name: Check folder changes
+        id: check-changes
+        run: |
+          changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+
+          # Check if the folder has changes
+          if echo "$changes" | grep -q "folderA/"; then
+            echo "FolderA has changes"
+          fi
+
   check_changes:
     runs-on: ubuntu-latest
 
