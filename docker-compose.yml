@@ -10,25 +10,27 @@ services:
     ports:
       - 80:80
 
-  # api:
-  #   build:
-  #     context: ./api
-  #     dockerfile: Dockerfile.dev
-  #   ports:
-  #     - 3001:3001
-  #   env_file:
-  #     - ./environment.env
-  #   volumes:
-  #     - ./api/app/:/app/
-  #   command: air
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    ports:
+      - 8080:8080
+    env_file:
+      - ./environment.env
+    volumes:
+      - ./api/app/:/app/
+    command: air
     
-  # database:
-  #   image: mongo
-  #   container_name: database
-  #   ports:
-  #     - 27017:27017
-  #   volumes:
-  #     - ./database:/data/db
+
+  database:
+    image: mongo
+    container_name: database
+    ports:
+      - 27017:27017
+    volumes:
+      - ./database:/data/db
 
   # consumer:
   #   build:
@@ -41,63 +43,63 @@ services:
   #   command: python3 main.py
 
 
-  # kafka-ui:
-  #   image: consdata/kouncil:latest
-  #   environment:
-  #     bootstrapServers: kafka1:9092,kafka2:9092
-  #     kouncil.auth.active-provider: "inmemory"
-  #   ports:
-  #     - 8080:8080
+  kafka-ui:
+    image: consdata/kouncil:latest
+    environment:
+      bootstrapServers: kafka1:9092,kafka2:9092
+      kouncil.auth.active-provider: "inmemory"
+    ports:
+      - 8081:8080
 
 
-  # kafka1: # Kafka Kraft node1
-  #   hostname: kafka1
-  #   container_name: kafka1
-  #   image: confluentinc/cp-kafka:7.2.2-1-ubi8
-  #   ports:
-  #     - "39094:39094"
-  #   environment:
-  #     KAFKA_NODE_ID: 1
-  #     KAFKA_LISTENERS: BROKER://kafka1:9092,EXTERNAL://kafka1:39094,CONTROLLER://kafka1:9093
-  #     KAFKA_ADVERTISED_LISTENERS: BROKER://kafka1:9092,EXTERNAL://kafka1:39094
+  kafka1: # Kafka Kraft node1
+    hostname: kafka1
+    container_name: kafka1
+    image: confluentinc/cp-kafka:7.2.2-1-ubi8
+    ports:
+      - "39094:39094"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENERS: BROKER://kafka1:9092,EXTERNAL://kafka1:39094,CONTROLLER://kafka1:9093
+      KAFKA_ADVERTISED_LISTENERS: BROKER://kafka1:9092,EXTERNAL://kafka1:39094
 
-  #     KAFKA_INTER_BROKER_LISTENER_NAME: BROKER
-  #     KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,BROKER:PLAINTEXT,EXTERNAL:PLAINTEXT
-  #     KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-  #     KAFKA_PROCESS_ROLES: 'controller,broker'
-  #     KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093'
-  #     KAFKA_METADATA_LOG_SEGMENT_MS: 15000
-  #     KAFKA_METADATA_MAX_RETENTION_MS: 1200000
-  #     KAFKA_METADATA_LOG_MAX_RECORD_BYTES_BETWEEN_SNAPSHOTS: 2800
-  #     KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
-  #   volumes:
-  #     - ./scripts/kafka_update_run.sh:/tmp/update_run.sh
-  #     - ./.clusterID:/tmp/clusterID
-  #   command: "sh -c '/tmp/update_run.sh && /etc/confluent/docker/run'"
+      KAFKA_INTER_BROKER_LISTENER_NAME: BROKER
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,BROKER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_PROCESS_ROLES: 'controller,broker'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093'
+      KAFKA_METADATA_LOG_SEGMENT_MS: 15000
+      KAFKA_METADATA_MAX_RETENTION_MS: 1200000
+      KAFKA_METADATA_LOG_MAX_RECORD_BYTES_BETWEEN_SNAPSHOTS: 2800
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+    volumes:
+      - ./scripts/kafka_update_run.sh:/tmp/update_run.sh
+      - ./.clusterID:/tmp/clusterID
+    command: "sh -c '/tmp/update_run.sh && /etc/confluent/docker/run'"
 
-  # kafka2: # Kafka kraft node2
-  #   hostname: kafka2
-  #   container_name: kafka2
-  #   image: confluentinc/cp-kafka:7.2.2-1-ubi8
-  #   ports:
-  #     - "39095:39095"
-  #   environment:
-  #     KAFKA_NODE_ID: 2
-  #     KAFKA_LISTENERS: BROKER://kafka2:9092,EXTERNAL://kafka2:39095,CONTROLLER://kafka2:9093
-  #     KAFKA_ADVERTISED_LISTENERS: BROKER://kafka2:9092,EXTERNAL://kafka2:39095
+  kafka2: # Kafka kraft node2
+    hostname: kafka2
+    container_name: kafka2
+    image: confluentinc/cp-kafka:7.2.2-1-ubi8
+    ports:
+      - "39095:39095"
+    environment:
+      KAFKA_NODE_ID: 2
+      KAFKA_LISTENERS: BROKER://kafka2:9092,EXTERNAL://kafka2:39095,CONTROLLER://kafka2:9093
+      KAFKA_ADVERTISED_LISTENERS: BROKER://kafka2:9092,EXTERNAL://kafka2:39095
 
-  #     KAFKA_INTER_BROKER_LISTENER_NAME: BROKER
-  #     KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,BROKER:PLAINTEXT,EXTERNAL:PLAINTEXT
-  #     KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-  #     KAFKA_PROCESS_ROLES: 'controller,broker'
-  #     KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093'
-  #     KAFKA_METADATA_LOG_SEGMENT_MS: 15000
-  #     KAFKA_METADATA_MAX_RETENTION_MS: 1200000
-  #     KAFKA_METADATA_LOG_MAX_RECORD_BYTES_BETWEEN_SNAPSHOTS: 2800
-  #     KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
-  #   volumes:
-  #     - ./scripts/kafka_update_run.sh:/tmp/update_run.sh
-  #     - ./.clusterID:/tmp/clusterID
-  #   command: "sh -c '/tmp/update_run.sh && /etc/confluent/docker/run'"
+      KAFKA_INTER_BROKER_LISTENER_NAME: BROKER
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,BROKER:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_PROCESS_ROLES: 'controller,broker'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093'
+      KAFKA_METADATA_LOG_SEGMENT_MS: 15000
+      KAFKA_METADATA_MAX_RETENTION_MS: 1200000
+      KAFKA_METADATA_LOG_MAX_RECORD_BYTES_BETWEEN_SNAPSHOTS: 2800
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+    volumes:
+      - ./scripts/kafka_update_run.sh:/tmp/update_run.sh
+      - ./.clusterID:/tmp/clusterID
+    command: "sh -c '/tmp/update_run.sh && /etc/confluent/docker/run'"
