@@ -22,7 +22,7 @@ jobs:
         id: check-changes
         run: |
           changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-          echo "chang=${changes}" >> $GITHUB_ENV
+          echo "changes=${changes}" >> $GITHUB_ENV
 
   build_and_push:
     needs: check_changes
@@ -46,7 +46,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
       
       - name: Build Image
-        if: contains(needs.check_changes.outputs.chang, matrix.folder)
+        if: contains(needs.check_changes.outputs.changes, matrix.folder)
         run: |
           echo "Run Build Image"
           cd ${{ matrix.folder }}
