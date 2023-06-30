@@ -37,25 +37,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
         
-      - name: Check folder changes
-        id: check-changes
-        run: |
-          default_branch=$(git symbolic-ref --short HEAD)
-          changes=$(git diff --name-only $default_branch ${{ github.sha }})
-          echo "changes=${changes}" >> $GITHUB_ENV
-          if echo "$changes" | grep -q "api/"; then
-            echo "FolderA has changes"
-          fi
-
 #       - name: Check folder changes
 #         id: check-changes
 #         run: |
-#           changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+#           default_branch=$(git symbolic-ref --short HEAD)
+#           changes=$(git diff --name-only $default_branch ${{ github.sha }})
 #           echo "changes=${changes}" >> $GITHUB_ENV
 #           if echo "$changes" | grep -q "api/"; then
 #             echo "FolderA has changes"
 #           fi
+
+      - name: Check folder changes
+        id: check-changes
+        run: |
+          changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          echo "changes=${changes}" >> $GITHUB_ENV
+          if echo "$changes" | grep -q "api/"; then
+            echo "FolderA has changes"
+          fi
 
   build_and_push:
     needs: check_changes
