@@ -60,14 +60,14 @@ jobs:
       - name: Setup Docker
         uses: docker/setup-buildx-action@v2
         
-#       - name: Test check changes
-#         run: |
-#           echo "Run list changes: ${{ needs.check_changes.outputs.changes }}"
-#           echo "Folder: ${{ matrix.folder }}"
-#           echo "Check Contain: ${{ needs.check_changes.outputs.is_changes_${{ matrix.image }}"
+      - name: Test check changes
+        run: |
+          echo "Run list changes: ${{ needs.check_changes.outputs.changes }}"
+          echo "Folder: ${{ matrix.folder }}"
+          echo "Check Contain: ${{ needs.check_changes.outputs.is_changes_${{ matrix.folder }}"
       
       - name: Build Image
-        if: needs.check_changes.outputs.is_changes_${{ matrix.folder }} == 'true'
+        if: needs.check_changes.outputs.is_changes_${{ matrix.folder }} == true
         run: |
           echo "Run Build Image"
           cd ${{ matrix.folder }}
