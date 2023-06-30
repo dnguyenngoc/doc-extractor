@@ -35,8 +35,8 @@ jobs:
       - name: Check folder change
         id: check-changes
         run: | 
-          if echo "$changes" | grep -q ${{ matrix.folder }}; then
-            echo "is_changes_${{ matrix.image }}=true" >> $GITHUB_ENV
+          if echo "$changes" | grep -q ${{ matrix.folder_check }}; then
+            echo "is_changes_${{ matrix.folder_check }}=true" >> $GITHUB_ENV
           fi
 
   build_and_push:
@@ -67,7 +67,7 @@ jobs:
 #           echo "Check Contain: ${{ needs.check_changes.outputs.is_changes_${{ matrix.image }}"
       
       - name: Build Image
-        if: needs.check_changes.outputs.is_changes_${{ matrix.image }} == 'true' && matrix.folder == needs.check_changes.outputs.changed_folder
+        if: needs.check_changes.outputs.is_changes_${{ matrix.folder }} == 'true'
         run: |
           echo "Run Build Image"
           cd ${{ matrix.folder }}
