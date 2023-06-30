@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Setup Docker
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v2
       
       - name: Build Image
         if: contains(needs.check_changes.outputs.chang, matrix.folder)
