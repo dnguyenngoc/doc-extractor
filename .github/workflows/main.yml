@@ -11,19 +11,18 @@ env:
   VERSION: "latest"
 
 jobs:
-  
   check_changes:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
+
       - name: Check folder changes
         id: check-changes
         run: |
-          echo "Check changes: $(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
-          echo "chang=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})" >> $GITHUB_CHECKCHANGES
-          echo "DONE: $GITHUB_CHECKCHANGES"
+          changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          echo "changes=${chang}" >> $GITHUB_ENV
 
   build_and_push:
     needs: check_changes
