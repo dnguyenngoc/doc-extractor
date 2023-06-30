@@ -21,8 +21,8 @@ jobs:
       - name: Check folder changes
         id: check-changes
         run: |
-          echo "Check changes: $(git diff --name-only ${{ github.event.before }} ${{ github.sha }}"
-          echo "::set-output name=chang::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }}"
+          echo "Check changes: $(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
+          echo "::set-output name=chang::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})"
 
   build_and_push:
     needs: check_changes
