@@ -16,6 +16,10 @@ jobs:
 
   check_changes:
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        folder_check: [api/, client/]
 
     steps:
       - name: Checkout code
@@ -23,12 +27,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check folder changes
-        id: check-changes
+      - name: Get folder changes
+        id: get-changes-folder
         run: |
           changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-          echo "changes=${changes}" >> $GITHUB_ENV
-          echo "CHANGES: $changes"
+          
+      - name: Check folder change
+        id: check-changes
+        run: | 
+          if echo "$changes" | grep -q ${{ matrix.folder }}; then
+            echo "is_changes_${{ matrix.image }}=true" >> $GITHUB_ENV
+          fi
 
   build_and_push:
     needs: check_changes
