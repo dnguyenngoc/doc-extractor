@@ -22,7 +22,7 @@ jobs:
         id: check-changes
         run: |
           changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-          echo "changes=${chang}" >> $GITHUB_ENV
+          echo "chang=${changes}" >> $GITHUB_ENV
 
   build_and_push:
     needs: check_changes
