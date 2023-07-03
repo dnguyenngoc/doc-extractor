@@ -81,7 +81,7 @@ jobs:
           echo "Here: $check"
           
       - name: Build Image
-        if: needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] && needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] == 'true'
+        if: needs.check_changes.outputs["is_changes_${{ matrix.folder_check }}"] == 'true'
         run: |
           echo "Run Build Image"
           cd ${{ matrix.folder }}
