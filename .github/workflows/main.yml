@@ -64,7 +64,7 @@ jobs:
         run: |
           echo "Run list changes: ${{ needs.check_changes.outputs.changes }}"
           echo "Folder: ${{ matrix.folder }}"
-          echo "Check API: ${{ needs.check_changes.outputs.is_changes_api/ }}"
+          echo "Check API: ${{ needs.check_changes.outputs.is_changes_api }}"
           echo "Check Contain: $ {{ needs.check_changes.outputs.is_changes_${{ matrix.folder }} }}"
       
       - name: Build Image
