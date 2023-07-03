@@ -34,7 +34,7 @@ jobs:
         
       - name: Check get change
         run: |
-          if echo "$changes" | grep -q "api"; then
+          if echo "$changes" | grep -q "api/"; then
             echo "API has changes"
           fi
           
