@@ -31,9 +31,7 @@ jobs:
         id: get-changes-folder
         run: |
           changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-          if echo "$changes" | grep -q "api/"; then
-            echo "API has changes"
-          fi
+          echo "changes=${changes}" >> $GITHUB_ENV
 
         
       - name: Check get change
@@ -78,7 +76,7 @@ jobs:
           echo "Check Contain: $ {{ needs.check_changes.outputs.is_changes_${{ matrix.folder }} }}"
       
       - name: Build Image
-        if: needs.check_changes.outputs.is_changes_${{ matrix.folder }} == true
+        if: needs.check_changes.outputs["is_changes_" + matrix.folder] == 'true'
         run: |
           echo "Run Build Image"
           cd ${{ matrix.folder }}
