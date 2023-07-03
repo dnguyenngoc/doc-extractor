@@ -77,7 +77,7 @@ jobs:
       
       - name: Check change image
         run: |
-          check= ${{ needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] && needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] == 'true' }}
+          check= needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] && needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] == 'true'
           echo "Here: $check"
           
       - name: Build Image
