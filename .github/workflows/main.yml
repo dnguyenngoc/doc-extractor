@@ -31,6 +31,10 @@ jobs:
         id: get-changes-folder
         run: |
           changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          if echo "$changes" | grep -q "api/"; then
+            echo "API has changes"
+          fi
+
         
       - name: Check get change
         run: |
