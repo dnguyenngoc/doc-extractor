@@ -75,6 +75,11 @@ jobs:
           echo "Check API: ${{ needs.check_changes.outputs.is_changes_api }}"
           echo "Check Contain: $ {{ needs.check_changes.outputs.is_changes_${{ matrix.folder }} }}"
       
+      - name: Check change image
+        run: |
+          check= ${{ needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] && needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] == 'true' }}
+          echo "Here: $check"
+          
       - name: Build Image
         if: needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] && needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] == 'true'
         run: |
