@@ -42,10 +42,12 @@ jobs:
           
       - name: Check folder change
         id: check-changes
-        run: | 
-          if echo "$changes" | grep -q ${{ matrix.folder_check }}; then
-            echo "is_changes_$(basename "${{ matrix.folder_check }}")=true" >> $GITHUB_ENV
-          fi
+        run: |
+          for folder in "${{ matrix.folder_check[@] }}"; do
+            if echo "$changes" | grep -q "^${folder}"; then
+              echo "is_changes_$(basename "${folder}")=true" >> $GITHUB_ENV
+            fi
+          done
 
   build_and_push:
     needs: check_changes
