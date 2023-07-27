@@ -1,18 +1,16 @@
 name: Deploy to Heroku on Client Changes
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
     
 env:
-  DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-  PROJECT_NAME: "doc-extractor"
-  VERSION: "latest"
-  HEROKU_CLIENT_APP: "doc-extractor-fe"
+    PROJECT_NAME: "doc-extractor"
+    VERSION: "latest"
+    DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+    DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+    HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+    HEROKU_CLIENT_APP: "doc-extractor-fe"
 
 jobs:
   deploy-heroku:
@@ -29,7 +27,7 @@ jobs:
       - name: Build and Push Docker image
         run: |
           cd client
-          docker build -t registry.heroku.com/doc-extractor-fe/web .
+          docker docker build -t registry.heroku.com/doc-extractor-fe/web -f Dockerfile.heroku .
           docker push registry.heroku.com/doc-extractor-fe/web
 
       - name: Release to Heroku
