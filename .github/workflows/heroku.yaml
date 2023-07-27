@@ -23,36 +23,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get folder changes
-        id: get-changes-folder
+      - name: Log in to Heroku
+        run: heroku container:login
+  
+      - name: Build and Push Docker image
         run: |
-          changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^client/')
-          echo "changes=${changes}" >> $GITHUB_ENV
+          cd client
+          docker build -t registry.heroku.com/doc-extractor-fe/web .
+          docker push registry.heroku.com/doc-extractor-fe/web
 
-      - name: Login to Docker Hub
-        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-
-      - name: Build Docker image
-        if: ${{ env.changes != '' }}
-        run: |
-          echo "Changes found in client folder, building Docker image..."
-          docker  build -f client/Dockerfile -t streamingpipeline/doc-extractor:client-latest client/
-
-
-      - name: Push Docker image to Docker Hub
-        if: ${{ env.changes != '' }}
-        run: |
-          echo "Pushing Docker image to Docker Hub..."
-          docker push streamingpipeline/doc-extractor:client-latest
-
-      - name: Install Heroku CLI
-        run: npm install -g heroku
-
-      - name: Login to Heroku Container Registry
-        run: echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
+      - name: Release to Heroku
+        run: heroku container:release web -a doc-extractor-fe
+        
 
       - name: Release Docker image to Heroku
-        if: ${{ env.changes != '' }}
         run: |
           echo "Releasing Docker image to Heroku..."
           heroku container:release web --app $HEROKU_CLIENT_APP
