@@ -27,7 +27,7 @@ jobs:
       - name: Build and Push Docker image
         run: |
           cd client
-          docker docker build -t registry.heroku.com/doc-extractor-fe/web -f Dockerfile.heroku .
+          docker build -t registry.heroku.com/doc-extractor-fe/web -f Dockerfile.heroku .
           docker push registry.heroku.com/doc-extractor-fe/web
 
       - name: Release to Heroku
