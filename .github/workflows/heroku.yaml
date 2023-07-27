@@ -29,9 +29,6 @@ jobs:
           changes=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^client/')
           echo "changes=${changes}" >> $GITHUB_ENV
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Login to Docker Hub
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
@@ -39,14 +36,14 @@ jobs:
         if: ${{ env.changes != '' }}
         run: |
           echo "Changes found in client folder, building Docker image..."
-          docker buildx create --use
-          docker buildx build --file client/Dockerfile --tag $DOCKER_USERNAME/$PROJECT_NAME:client-$VERSION client/
+          docker  build -f client/Dockerfile -t streamingpipeline/doc-extractor:client-latest client/
+
 
       - name: Push Docker image to Docker Hub
         if: ${{ env.changes != '' }}
         run: |
           echo "Pushing Docker image to Docker Hub..."
-          docker push $DOCKER_USERNAME/$PROJECT_NAME:client-$VERSION
+          docker push streamingpipeline/doc-extractor:client-latest
 
       - name: Install Heroku CLI
         run: npm install -g heroku
