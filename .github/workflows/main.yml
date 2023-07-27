@@ -8,7 +8,9 @@ on:
     
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
   PROJECT_NAME: "doc-extractor"
   VERSION: "latest"
 
@@ -91,3 +93,29 @@ jobs:
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker push ${{ matrix.image }}
+
+  deploy-heroku:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Login to Docker Hub
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+      - name: Install Heroku CLI
+        run: npm install -g heroku
+
+      - name: Check change image
+        run: |
+          check= needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] && needs.check_changes.outputs["is_changes_${{ matrix.folder }}"] == 'true'
+          echo "Change: $check"
+
+      - name: Login to Heroku Container Registry
+        run: echo "${{ secrets.HEROKU_API_KEY }}" | docker login --username=_ --password-stdin registry.heroku.com
+
+      - name: Release Docker image to Heroku
+        if: needs.check_changes.outputs["is_changes_${{ matrix.folder_check }}"] == 'true' && matrix.folder_check == 'client'
+        run: |
+          echo "Releasing Docker image for ${{ matrix.folder_check }}"
+          heroku container:release web -a doc-extractor-fe
